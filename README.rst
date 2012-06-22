@@ -38,7 +38,9 @@ https://github.com/ampledata/boundary-annotations-python
 
 Author
 ======
-Greg Albrecht mailto:gba@splunk.com
+Greg Albrecht gba@splunk.com
+
+http://ampledata.org/
 
 
 Copyright
