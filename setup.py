@@ -31,5 +31,5 @@ setup(
     license=read_license(),
     packages=find_packages(exclude=('tests', 'docs')),
     setup_requires=['nose'],
-    tests_require=['mock']
+    tests_require=['mock', 'coverage']
 )
