@@ -24,10 +24,11 @@ setup(
     name='boundary_annotations',
     version='1.0.0',
     description='Boundary Annotations API Client',
-    long_description=read_readme(),
+    #long_description=read_readme(),
     author='Greg Albrecht',
     author_email='gba@splunk.com',
     url='https://github.com/ampledata/boundary-annotations-python',
-    license=read_license(),
-    packages=find_packages(exclude=('tests', 'docs'))
+    #license=read_license(),
+    packages=find_packages(exclude=('tests', 'docs')),
+    package_data={'': ['LICENSE*', 'README*']}
 )

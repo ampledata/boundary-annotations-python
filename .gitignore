@@ -1,1 +1,5 @@
 *.pyc
+.tox
+build
+dist
+boundary_annotations.egg-info
