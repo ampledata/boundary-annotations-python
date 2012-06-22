@@ -30,5 +30,6 @@ setup(
     url='https://github.com/ampledata/boundary-annotations-python',
     license=read_license(),
     packages=find_packages(exclude=('tests', 'docs')),
-    setup_requires=['nose', 'mock']
+    setup_requires=['nose'],
+    tests_require=['mock']
 )
