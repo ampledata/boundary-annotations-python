@@ -29,5 +29,6 @@ setup(
     author_email='gba@splunk.com',
     url='https://github.com/ampledata/boundary-annotations-python',
     license=read_license(),
-    packages=find_packages(exclude=('tests', 'docs'))
+    packages=find_packages(exclude=('tests', 'docs')),
+    setup_requires=['nose']
 )
