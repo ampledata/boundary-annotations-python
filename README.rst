@@ -3,23 +3,25 @@ Boundary Annotations API Client for Python.
 
 Installation
 ============
+
 ::
     pip install boundary_annotations
 
 
 Usage Example
 =============
+
 ::
     import boundary_annotations
-
-
+    
+    
     annotation = {
         'type': 'example',
         'subtype': 'test'
     }
-
+    
     apiclient = boundary_annotations.BoundaryAnnotations('a', 'b')
-
+    
     apiclient.create_annotation(annotation)
 
 
