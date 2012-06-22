@@ -22,7 +22,7 @@ def read_license():
 
 setup(
     name='boundary_annotations',
-    version='1.0.0',
+    version='1.0.1',
     description='Boundary Annotations API Client',
     long_description=read_readme(),
     author='Greg Albrecht',
@@ -30,5 +30,5 @@ setup(
     url='https://github.com/ampledata/boundary-annotations-python',
     license=read_license(),
     packages=find_packages(exclude=('tests', 'docs')),
-    setup_requires=['nose']
+    setup_requires=['nose', 'mock']
 )
