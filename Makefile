@@ -27,3 +27,9 @@ install:
 
 uninstall:
 	pip uninstall boundary_annotations
+
+build:
+	python setup.py sdist
+
+publish:
+	python setup.py sdist upload
