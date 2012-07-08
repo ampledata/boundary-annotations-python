@@ -59,7 +59,7 @@ def _call_git_describe():
         git_describe.stderr.close()
         line = git_describe.stdout.readlines()[0]
         return line.strip()
-    except OSError:
+    except (OSError, IndexError):
         return None
 
 
