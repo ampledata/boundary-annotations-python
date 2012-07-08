@@ -41,10 +41,11 @@ import os
 from subprocess import Popen, PIPE
 
 
-RELEASE_VERSION_FILE = 'VERSION.txt'
+VERSION_FILE = 'VERSION.txt'
+RELEASE_VERSION_FILE = 'RELEASE-VERSION.txt'
 
 
-def call_git_describe():
+def _call_git_describe():
     try:
         git_cmd = ['git', 'describe', '--contains', '--all', 'HEAD']
         git_describe = Popen(git_cmd, stdout=PIPE, stderr=PIPE)
@@ -55,37 +56,31 @@ def call_git_describe():
         return None
 
 
-def read_release_version():
+def _read_version_file(version_file):
     try:
-        release_file = open(RELEASE_VERSION_FILE, 'r')
+        vfile = open(version_file, 'r')
         try:
-            version = release_file.readlines()[0]
+            version = vfile.readlines()[0]
             return version.strip()
         finally:
-            release_file.close()
+            vfile.close()
     except:
         return None
 
 
-def write_release_version(version):
+def _write_release_version(version):
     release_file = open(RELEASE_VERSION_FILE, 'w')
     release_file.write("%s\n" % version)
     release_file.close()
 
 
-def adapt_pep386(version):
-    """Adapts git-describe version to be in line with PEP 386"""
-    if version is not None and '-' in version:
-        parts = version.split('-')
-        parts[-2] = 'post'+parts[-2]
-        version = '.'.join(parts[:-1])
-        return version
-
-
 def get_version():
-    # Read in the version that's currently in VERSION.txt.
-    version = read_release_version()
-    git_branch = call_git_describe()
+    release_version = _read_version_file(RELEASE_VERSION_FILE)
+    if release_version is not None:
+        return release_version
+
+    version = _read_version_file(VERSION_FILE)
+    git_branch = _call_git_describe()
     build_number = os.environ.get('BUILD_NUMBER')
 
     if build_number is not None:
@@ -95,6 +90,7 @@ def get_version():
         _branch = git_branch.split('/')[-1]
         version = '-'.join([version, _branch])
 
+    _write_release_version(version)
     return version
 
 
