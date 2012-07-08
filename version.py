@@ -76,7 +76,8 @@ def _write_release_version(version):
 
 def get_version():
     release_version = _read_version_file(RELEASE_VERSION_FILE)
-    if release_version is not None:
+    if (release_version is not None and
+        os.environ.get('BUILD_NUMBER') is not None):
         return release_version
 
     version = _read_version_file(VERSION_FILE)
