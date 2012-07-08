@@ -5,7 +5,10 @@ __copyright__ = 'Copyright 2012 Splunk, Inc.'
 __license__ = 'Apache License 2.0'
 
 
-from setuptools import setup, find_packages
+import os
+import setuptools
+
+import version
 
 
 def read_readme():
@@ -20,16 +23,29 @@ def read_license():
         lcf.read()
 
 
-setup(
+def write_build_env(cmd, basename, filename):
+    """Writes the build environment to the specified file - A TOTAL HACK."""
+    env = "\n".join(['='.join(item) for item in os.environ.items()])
+    fd = open(filename, 'wb')
+    fd.write(env)
+    fd.close()
+
+
+setuptools.setup(
     name='boundary_annotations',
-    version='1.0.1',
+    version=version.get_version(),
     description='Boundary Annotations API Client',
     long_description=read_readme(),
     author='Greg Albrecht',
     author_email='gba@splunk.com',
     url='https://github.com/ampledata/boundary-annotations-python',
     license=read_license(),
-    packages=find_packages(exclude=('tests', 'docs')),
+    packages=setuptools.find_packages(exclude=('tests', 'docs')),
     setup_requires=['nose'],
-    tests_require=['mock', 'coverage']
+    tests_require=['mock', 'coverage'],
+    entry_points = {
+        'egg_info.writers': [
+            "build_env.txt = setup:write_build_env"
+        ]
+    }
 )
