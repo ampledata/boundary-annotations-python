@@ -19,7 +19,7 @@ def read_readme():
 
 def read_license():
     """Reads in LICENSE file for use in setuptools."""
-    with open('LICENSE') as lcf:
+    with open('LICENSE.txt') as lcf:
         lcf.read()
 
 
