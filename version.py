@@ -84,13 +84,13 @@ def adapt_pep386(version):
 
 def get_version():
     # Read in the version that's currently in VERSION.txt.
-    release_version = read_release_version()
+    version = read_release_version()
     git_branch = call_git_describe()
     build_number = os.environ.get('BUILD_NUMBER')
 
     if git_branch is not None and not 'release' in git_branch:
         _branch = git_branch.split('/')[-1]
-        version = '_'.join([release_version, _branch])
+        version = '_'.join([version, _branch])
 
     if build_number is not None:
         version = '.'.join([version, build_number])
