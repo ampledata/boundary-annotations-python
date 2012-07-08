@@ -17,12 +17,6 @@ def read_readme():
         rmf.read()
 
 
-def read_license():
-    """Reads in LICENSE file for use in setuptools."""
-    with open('LICENSE.txt') as lcf:
-        lcf.read()
-
-
 def write_build_env(cmd, basename, filename):
     """Writes the build environment to the specified file - A TOTAL HACK."""
     env = "\n".join(['='.join(item) for item in os.environ.items()])
@@ -39,7 +33,7 @@ setuptools.setup(
     author='Greg Albrecht',
     author_email='gba@splunk.com',
     url='https://github.com/ampledata/boundary-annotations-python',
-    license=read_license(),
+    license='Apache License 2.0',
     packages=setuptools.find_packages(exclude=('tests', 'docs')),
     setup_requires=['nose'],
     tests_require=['mock', 'coverage'],
