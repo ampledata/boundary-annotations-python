@@ -6,7 +6,7 @@ output of “git describe”, modified to conform to the versioning
 scheme that setuptools uses.  If “git describe” returns an error
 (most likely because we're in an unpacked copy of a release tarball,
 rather than in a git working copy), then we fall back on reading the
-contents of the RELEASE-VERSION file.
+contents of the VERSION.txt file.
 
 To use this script, simply import it your setup.py file, and use the
 results of get_version() as your package version::
@@ -18,33 +18,35 @@ results of get_version() as your package version::
         ...
     )
 
-This will automatically update the RELEASE-VERSION file, if
-necessary.  Note that the RELEASE-VERSION file should *not* be
+This will automatically update the VERSION.txt file, if
+necessary.  Note that the VERSION.txt file should *not* be
 checked into git; please add it to your top-level .gitignore file.
 
-You'll probably want to distribute the RELEASE-VERSION file in your
+You'll probably want to distribute the VERSION.txt file in your
 sdist tarballs; to do this, just create a MANIFEST.in file that
 contains the following line::
 
-  include RELEASE-VERSION
+  include VERSION.txt
 
 Derived from http://dcreager.net/2010/02/10/setuptools-git-version-numbers/
 
 """
 __author__ = 'Douglas Creager <dcreager@dcreager.net>'
 __copyright__ = 'This file is placed into the public domain.'
-__all__ = ("get_version")
+__all__ = ('get_version')
 
+
+import os
 
 from subprocess import Popen, PIPE
 
 
-RELEASE_VERSION_FILE = 'RELEASE-VERSION'
+RELEASE_VERSION_FILE = 'VERSION.txt'
 
 
-def call_git_describe(abbrev=4):
+def call_git_describe():
     try:
-        git_cmd = ['git', 'describe', '--abbrev=%d' % abbrev]
+        git_cmd = ['git', 'describe', '--contains', '--all', 'HEAD']
         git_describe = Popen(git_cmd, stdout=PIPE, stderr=PIPE)
         git_describe.stderr.close()
         line = git_describe.stdout.readlines()[0]
@@ -80,37 +82,20 @@ def adapt_pep386(version):
         return version
 
 
-def get_version(abbrev=4):
-    # Read in the version that's currently in RELEASE-VERSION.
+def get_version():
+    # Read in the version that's currently in VERSION.txt.
     release_version = read_release_version()
+    git_branch = call_git_describe()
+    build_number = os.environ.get('BUILD_NUMBER')
 
-    # First try to get the current version using “git describe”.
-    version = call_git_describe(abbrev)
+    if not 'release' in git_branch:
+        version = '.'.join([release_version, git_branch])
 
-    # Adapt to PEP 386 compatible versioning scheme
-    version = adapt_pep386(version)
-
-    # If that doesn't work, fall back on the value that's in
-    # RELEASE-VERSION.
-
-    if version is None:
-        version = release_version
-
-    # If we still don't have anything, that's an error.
-
-    if version is None:
-        raise ValueError('Cannot find the version number!')
-
-    # If the current version is different from what's in the
-    # RELEASE-VERSION file, update the file to be current.
-
-    if version != release_version:
-        write_release_version(version)
-
-    # Finally, return the current version.
+    if build_number is not None:
+        version = '.'.join([version, build_number])
 
     return version
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     print get_version()

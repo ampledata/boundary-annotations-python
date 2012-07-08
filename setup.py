@@ -33,7 +33,7 @@ def write_build_env(cmd, basename, filename):
 
 setuptools.setup(
     name='boundary_annotations',
-    version='1.0.2a',
+    version=version.get_version(),
     description='Boundary Annotations API Client',
     long_description=read_readme(),
     author='Greg Albrecht',
