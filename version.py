@@ -88,7 +88,8 @@ def get_version():
     git_branch = call_git_describe()
     build_number = os.environ.get('BUILD_NUMBER')
 
-    if not 'release' in git_branch:
+    if git_branch is not None and not 'release' in git_branch:
+        _branch = git_branch.split('/')[-1]
         version = '.'.join([release_version, git_branch])
 
     if build_number is not None:
