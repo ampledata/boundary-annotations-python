@@ -75,21 +75,23 @@ def _write_release_version(version):
 
 
 def get_version():
-    release_version = _read_version_file(RELEASE_VERSION_FILE)
-    if (release_version is not None and
-        os.environ.get('BUILD_NUMBER') is not None):
-        return release_version
+    build_number = os.environ.get('BUILD_NUMBER')
+    git_branch = _call_git_describe()
 
     version = _read_version_file(VERSION_FILE)
-    git_branch = _call_git_describe()
-    build_number = os.environ.get('BUILD_NUMBER')
+    release_version = _read_version_file(RELEASE_VERSION_FILE)
+
+    if release_version is not None:
+        if git_branch is None:
+            # We're probably a released version since there's no git branch.
+            return release_version
 
     if build_number is not None:
         version = '.'.join([version, build_number])
 
     if git_branch is not None:
-        _branch = git_branch.split('/')[-1]
-        version = '-'.join([version, _branch])
+        branch = git_branch.split('/')[-1]
+        version = '-'.join([version, branch])
 
     _write_release_version(version)
     return version
