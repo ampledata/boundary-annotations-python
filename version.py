@@ -90,7 +90,7 @@ def get_version():
 
     if git_branch is not None and not 'release' in git_branch:
         _branch = git_branch.split('/')[-1]
-        version = '.'.join([release_version, git_branch])
+        version = '.'.join([release_version, _branch])
 
     if build_number is not None:
         version = '.'.join([version, build_number])
