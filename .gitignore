@@ -4,3 +4,10 @@
 build/
 dist/
 RELEASE-VERSION.txt
+cover/
+.coverage
+nosetests.xml
+doctest_pypi.cfg
+pylint.log
+output.xml
+flake8.log

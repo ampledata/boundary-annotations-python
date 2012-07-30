@@ -6,24 +6,41 @@
 #
 
 
+.DEFAULT: init
+
 init:
 	pip install -r requirements.txt --use-mirrors
-
-test:
-	nosetests tests
-
-lint:
-	pylint -i y -r n -f colorized boundary_annotations
-	pylint -i y -r n -f colorized tests/*.py
-	pylint -i y -r n -f colorized *.py
-
-pep8:
-	pep8 boundary_annotations/*.py
-	pep8 tests/*.py
-	pep8 *.py
 
 install:
 	pip install .
 
 uninstall:
 	pip uninstall boundary_annotations
+
+lint:
+	pylint -f parseable -i y -r y pypirc/*.py tests/*.py *.py | \
+		tee pylint.log
+
+flake8:
+	flake8 --exit-zero  --max-complexity 12 pypirc/*.py tests/*.py *.py | \
+		awk -F\: '{printf "%s:%s: [E]%s\n", $$1, $$2, $$3}' | tee flake8.log
+
+pep8: flake8
+
+clonedigger:
+	clonedigger --cpd-output . #pypirc/*.py tests/*.py *.py
+
+develop:
+	python setup.py develop
+
+publish:
+	python setup.py register sdist upload
+
+nosetests:
+	python setup.py nosetests
+
+test: init lint flake8 clonedigger nosetests
+
+clean:
+	rm -rf *.egg* build dist *.pyc *.pyo cover doctest_pypi.cfg nosetests.xml \
+		pylint.log *.egg output.xml flake8.log
